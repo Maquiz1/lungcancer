@@ -148,7 +148,6 @@ if ($user->isLoggedIn()) {
             }
         }
 
-
         if ($_GET['status'] == 16) {
             $data = null;
             $filename = null;
@@ -920,21 +919,39 @@ if ($user->isLoggedIn()) {
                                                                 <?= $sites['name']; ?>
                                                             </td>
                                                         <?php } ?>
-                                                        <?php if ($value['age'] >= 18) { ?>
-                                                            <td class="text-center">
-                                                                <a href="#" class="btn btn-success">
-                                                                    <i class="ri-edit-box-line">
-                                                                    </i><?php if ($value['age'] >= 45 & $value['age'] <= 80) {  ?>Eligible for KAP & History Screening <?php } else { ?>Eligible for KAP ONLY <?php } ?>
-                                                                </a>
-                                                            </td>
-                                                        <?php  } else { ?>
-                                                            <td class="text-center">
-                                                                <a href="#" class="btn btn-danger"> <i class="ri-edit-box-line"></i>Not Eligible</a>
-                                                            </td>
+                                                        <?php if ($value['interview_type'] == 1) { ?>
+                                                            <?php if ($value['age'] >= 18) { ?>
+                                                                <td class="text-center">
+                                                                    <a href="#" class="btn btn-success">
+                                                                        <i class="ri-edit-box-line">
+                                                                        </i><?php if ($value['age'] >= 45 & $value['age'] <= 80) {  ?>Eligible for KAP & History Screening <?php } else { ?>Eligible for KAP ONLY <?php } ?>
+                                                                    </a>
+                                                                </td>
+                                                            <?php  } else { ?>
+                                                                <td class="text-center">
+                                                                    <a href="#" class="btn btn-danger"> <i class="ri-edit-box-line"></i>Not Eligible</a>
+                                                                </td>
+                                                            <?php } ?>
                                                         <?php } ?>
+
+                                                        <?php if ($value['interview_type'] == 2) { ?>
+                                                            <?php if ($value['age'] >= 18) { ?>
+                                                                <td class="text-center">
+                                                                    <a href="#" class="btn btn-success">
+                                                                        <i class="ri-edit-box-line">
+                                                                        </i><?php if ($value['age'] >= 18 & $value['age'] <= 100) {  ?>Eligible for Health Care Kap <?php } else { ?>Not Eligible for Health Care Kap<?php } ?>
+                                                                    </a>
+                                                                </td>
+                                                            <?php  } else { ?>
+                                                                <td class="text-center">
+                                                                    <a href="#" class="btn btn-danger"> <i class="ri-edit-box-line"></i>Not Eligible for Health Care Kap</a>
+                                                                </td>
+                                                            <?php } ?>
+                                                        <?php } ?>
+
                                                         <td class="text-center">
                                                             <?php if ($_GET['status'] == 7) { ?>
-                                                                <a href="add.php?id=4&cid=<?= $value['id'] ?>&status=<?= $_GET['status'] ?>" class="btn btn-info"> <i class="ri-edit-box-line"></i>Update</a>&nbsp;&nbsp;<br>
+                                                                <a href="add.php?id=4&cid=<?= $value['id'] ?>&status=<?= $_GET['status'] ?>" class="btn btn-info"> <i class="ri-edit-box-line"></i>Update Client Details</a>&nbsp;&nbsp;<br>
                                                             <?php } ?>
                                                             <br>
                                                             <?php if ($value['interview_type'] == 1) { ?>
@@ -950,10 +967,10 @@ if ($user->isLoggedIn()) {
 
                                                             <?php if ($value['interview_type'] == 2) { ?>
                                                                 <?php if ($value['age'] >= 18) { ?>
-                                                                    <?php if ($health_care_kap) { ?>
-                                                                        <a href="add.php?id=11&cid=<?= $value['id'] ?>&study_id=<?= $_GET['study_id'] ?>&status=<?= $_GET['status'] ?>" class="btn btn-success"> <i class="ri-edit-box-line"></i>Update Health Care Kap</a>&nbsp;&nbsp;<br>
+                                                                    <?php if ($kap) { ?>
+                                                                        <a href="info.php?id=4&cid=<?= $value['id'] ?>&status=<?= $_GET['status'] ?>" class="btn btn-success"> <i class="ri-edit-box-line"></i>Update Health Care Kap</a>&nbsp;&nbsp;<br>
                                                                     <?php   } else { ?>
-                                                                        <a href="add.php?id=11&cid=<?= $value['id'] ?>&study_id=<?= $_GET['study_id'] ?>&status=<?= $_GET['status'] ?>" class="btn btn-warning"> <i class="ri-edit-box-line"></i>Add Health Care Kap</a>&nbsp;&nbsp;<br>
+                                                                        <a href="info.php?id=4&cid=<?= $value['id'] ?>&status=<?= $_GET['status'] ?>" class="btn btn-warning"> <i class="ri-edit-box-line"></i>Add Health Care Kap</a>&nbsp;&nbsp;<br>
                                                                     <?php   } ?>
                                                                 <?php   } ?>
                                                             <?php   } ?>
@@ -1104,19 +1121,38 @@ if ($user->isLoggedIn()) {
                                                             <td> <?= $site['name'] ?> </td>
                                                         <?php } ?>
                                                         <td>
-                                                            <?php if ($visit['visit_status'] == 1) { ?>
-                                                                <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-success" data-toggle="modal">
-                                                                    Done <?php if ($clients['eligible'] == 1) {  ?> & ELigible for Tests <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp;Not ELigible for Tests</p> <?php } ?>
-                                                                </a>
-                                                            <?php } elseif ($visit['visit_status'] == 2) { ?>
-                                                                <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-warning" data-toggle="modal">
-                                                                    Missed <?php if ($clients['eligible'] == 1) {  ?> & ELigible for Tests <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp; Not ELigible for Tests </p><?php } ?>
-                                                                </a>
-                                                            <?php } elseif ($visit['visit_status'] == 0) { ?>
-                                                                <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-warning" data-toggle="modal">
-                                                                    Pending <?php if ($clients['eligible'] == 1) {  ?> & ELigible for Tests <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp; Not ELigible for Tests </p><?php } ?>
-                                                                </a>
+                                                            <?php if ($clients['interview_type'] == 1) { ?>
+                                                                <?php if ($visit['visit_status'] == 1) { ?>
+                                                                    <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-success" data-toggle="modal">
+                                                                        Done <?php if ($clients['eligible'] == 1) {  ?> & ELigible for Tests <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp;Not ELigible for Tests</p> <?php } ?>
+                                                                    </a>
+                                                                <?php } elseif ($visit['visit_status'] == 2) { ?>
+                                                                    <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-warning" data-toggle="modal">
+                                                                        Missed <?php if ($clients['eligible'] == 1) {  ?> & ELigible for Tests <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp; Not ELigible for Tests </p><?php } ?>
+                                                                    </a>
+                                                                <?php } elseif ($visit['visit_status'] == 0) { ?>
+                                                                    <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-warning" data-toggle="modal">
+                                                                        Pending <?php if ($clients['eligible'] == 1) {  ?> & ELigible for Tests <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp; Not ELigible for Tests </p><?php } ?>
+                                                                    </a>
+                                                                <?php } ?>
                                                             <?php } ?>
+
+                                                            <?php if ($clients['interview_type'] == 2) { ?>
+                                                                <?php if ($visit['visit_status'] == 1) { ?>
+                                                                    <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-success" data-toggle="modal">
+                                                                        Done <?php if ($clients['age'] >= 18) {  ?> & ELigible for Health Care Kap <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp;Not ELigible for Health Care Kap</p> <?php } ?>
+                                                                    </a>
+                                                                <?php } elseif ($visit['visit_status'] == 2) { ?>
+                                                                    <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-warning" data-toggle="modal">
+                                                                        Missed <?php if ($clients['age'] >= 18) {  ?> & ELigible for Health Care Kap <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp; Not ELigible for Health Care Kap </p><?php } ?>
+                                                                    </a>
+                                                                <?php } elseif ($visit['visit_status'] == 0) { ?>
+                                                                    <a href="#editVisit<?= $visit['id'] ?>" role="button" class="btn btn-warning" data-toggle="modal">
+                                                                        Pending <?php if ($clients['age'] >= 18) {  ?> & ELigible for Health Care Kap <?php } else { ?>& <p style="color:#FF0000" ;>&nbsp;&nbsp; Not ELigible for Health Care Kap </p><?php } ?>
+                                                                    </a>
+                                                                <?php } ?>
+                                                            <?php } ?>
+
                                                         </td>
 
                                                         <td>
@@ -1130,13 +1166,15 @@ if ($user->isLoggedIn()) {
 
                                                                     <?php } ?>
 
-                                                                    <?php if ($clients['age'] >= 45 && $clients['age'] <= 80) { ?>
-                                                                        <?php if ($history) { ?>
-                                                                            <a href="add.php?id=6&cid=<?= $_GET['cid'] ?>&study_id=<?= $visit['study_id'] ?>&status=<?= $_GET['status'] ?>" role=" button" class="btn btn-info"> Update History </a>&nbsp;&nbsp; <br><br>
+                                                                    <?php if ($clients['interview_type'] == 1) { ?>
+                                                                        <?php if ($clients['age'] >= 45 && $clients['age'] <= 80) { ?>
+                                                                            <?php if ($history) { ?>
+                                                                                <a href="add.php?id=6&cid=<?= $_GET['cid'] ?>&study_id=<?= $visit['study_id'] ?>&status=<?= $_GET['status'] ?>" role=" button" class="btn btn-info"> Update History </a>&nbsp;&nbsp; <br><br>
 
-                                                                        <?php } else { ?>
-                                                                            <a href="add.php?id=6&cid=<?= $_GET['cid'] ?>&study_id=<?= $visit['study_id'] ?>&status=<?= $_GET['status'] ?>" role=" button" class="btn btn-warning"> Add History </a>&nbsp;&nbsp; <br><br>
+                                                                            <?php } else { ?>
+                                                                                <a href="add.php?id=6&cid=<?= $_GET['cid'] ?>&study_id=<?= $visit['study_id'] ?>&status=<?= $_GET['status'] ?>" role=" button" class="btn btn-warning"> Add History </a>&nbsp;&nbsp; <br><br>
 
+                                                                            <?php } ?>
                                                                         <?php } ?>
                                                                     <?php } ?>
                                                                 <?php } ?>
@@ -2785,7 +2823,7 @@ if ($user->isLoggedIn()) {
                                                         <select name="name" id="name" class="form-control" required>
                                                             <option value="">Select Table</option>
                                                             <?php foreach ($AllTables as $tables) {
-                                                                if ($tables['Tables_in_lungcancer'] == 'clients' || $tables['Tables_in_lungcancer'] == 'kap' || $tables['Tables_in_lungcancer'] == 'history' || $tables['Tables_in_lungcancer'] == 'results' || $tables['Tables_in_lungcancer'] == 'classification' || $tables['Tables_in_lungcancer'] == 'outcome'|| $tables['Tables_in_lungcancer'] == 'economic' || $tables['Tables_in_lungcancer'] == 'visit') { ?> ?>
+                                                                if ($tables['Tables_in_lungcancer'] == 'clients' || $tables['Tables_in_lungcancer'] == 'kap' || $tables['Tables_in_lungcancer'] == 'history' || $tables['Tables_in_lungcancer'] == 'results' || $tables['Tables_in_lungcancer'] == 'classification' || $tables['Tables_in_lungcancer'] == 'outcome' || $tables['Tables_in_lungcancer'] == 'economic' || $tables['Tables_in_lungcancer'] == 'visit') { ?> ?>
                                                                     <option value="<?= $tables['Tables_in_lungcancer'] ?>"><?= $tables['Tables_in_lungcancer'] ?></option>
                                                             <?php }
                                                             } ?>
