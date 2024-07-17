@@ -74,7 +74,7 @@ $output .= '
 $x = 1;
 foreach ($clients as $client) {
     $site = $override->get('sites', 'id', $client['site_id'])[0];
-    $sex list.php= $override->get('sex', 'id', $client['sex'])[0];
+    $sex = $override->get('sex', 'id', $client['sex'])[0];
     if ($client['eligible'] == 1) {
             if ($screening['consented'] == 1) {
                 $consent = 'Called';
