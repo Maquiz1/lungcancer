@@ -146,7 +146,7 @@ if ($user->isLoggedIn()) {
             } else {
                 $pageError = $validate->errors();
             }
-        } elseif (Input::get('update_call')) {
+        } elseif (Input::get('add_call')) {
             $validate = $validate->check($_POST, array(
                 'date_called' => array(
                     'required' => true,
@@ -159,6 +159,10 @@ if ($user->isLoggedIn()) {
             if ($validate->passed()) {
                 $call_logs = $override->getlastRow('call_logs', 'patient_id', Input::get('cid'), 'id')[0];
                 if ($call_logs) {
+                    if ($call_logs['date_called'] < Input::get('date_called')) {
+                    } else {
+                        $errorMessage = 'Previous Call Date can not Greater than Today Call Date';
+                    }
                     $user->updateRecord('call_logs', array(
                         'date_called' => Input::get('date_called'),
                         'call_status' => Input::get('call_status'),
@@ -183,6 +187,28 @@ if ($user->isLoggedIn()) {
                     ));
                     $successMessage = 'Call Added Successful';
                 }
+            } else {
+                $pageError = $validate->errors();
+            }
+        } elseif (Input::get('update_call')) {
+            $validate = $validate->check($_POST, array(
+                'date_called' => array(
+                    'required' => true,
+                ),
+                'call_status' => array(
+                    'required' => true,
+                ),
+            ));
+
+            if ($validate->passed()) {
+                $user->updateRecord('call_logs', array(
+                    'date_called' => Input::get('date_called'),
+                    'call_status' => Input::get('call_status'),
+                    'comments' => Input::get('comments'),
+                    'update_on' => date('Y-m-d H:i:s'),
+                    'update_id' => $user->data()->id,
+                ), Input::get('id'));
+                $successMessage = 'Call Updates  Successful';
             } else {
                 $pageError = $validate->errors();
             }
@@ -394,7 +420,6 @@ if ($user->isLoggedIn()) {
                 <?= $successMessage ?>
             </div>
         <?php } ?>
-
 
         <?php if ($_GET['id'] == 1 && ($user->data()->position == 1 || $user->data()->position == 2 || $user->data()->position == 3)) { ?>
             <!-- Content Wrapper. Contains page content -->
@@ -3113,11 +3138,35 @@ if ($user->isLoggedIn()) {
                                                         </td>
 
                                                         <td class="text-center">
-                                                            <a href="#updateStatus<?= $call_logs['id'] ?>" role="button" class="btn btn-default" data-toggle="modal">
+                                                            <a href="#view_calls<?= $call_logs['id'] ?>" role="button" class="btn btn-default" data-toggle="modal">
                                                                 <?php if ($call_logs['call_status'] == 1) {  ?><p style="color:yellow" ;>&nbsp;&nbsp;Update Calls</p> <?php } elseif ($call_logs['call_logs'] == 2) { ?><p style="color:yellow" ;>&nbsp;&nbsp;Recall Again</p> <?php } else { ?><p style="color:red" ;>&nbsp;&nbsp;Add Calls</p> <?php } ?>
                                                             </a>
                                                         </td>
                                                     </tr>
+
+                                                    <div class="modal fade" id="view_calls<?= $call_logs['id'] ?>">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Large Modal</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                  
+                                                                </div>
+                                                                <div class="modal-footer justify-content-between">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.modal-content -->
+                                                        </div>
+                                                        <!-- /.modal-dialog -->
+                                                    </div>
+                                                    <!-- /.modal -->
+
                                                     <div class="modal fade" id="updateStatus<?= $call_logs['id'] ?>">
                                                         <div class="modal-dialog">
                                                             <form method="post">
