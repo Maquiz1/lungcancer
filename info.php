@@ -146,6 +146,46 @@ if ($user->isLoggedIn()) {
             } else {
                 $pageError = $validate->errors();
             }
+        } elseif (Input::get('update_call')) {
+            $validate = $validate->check($_POST, array(
+                'date_called' => array(
+                    'required' => true,
+                ),
+                'call_status' => array(
+                    'required' => true,
+                ),
+            ));
+
+            if ($validate->passed()) {
+                $call_logs = $override->getlastRow('call_logs', 'patient_id', Input::get('cid'), 'id')[0];
+                if ($call_logs) {
+                    $user->updateRecord('call_logs', array(
+                        'date_called' => Input::get('date_called'),
+                        'call_status' => Input::get('call_status'),
+                        'comments' => Input::get('comments'),
+                        'patient_id' => Input::get('cid'),
+                        'update_on' => date('Y-m-d H:i:s'),
+                        'update_id' => $user->data()->id,
+                    ), Input::get('id'));
+                    $successMessage = 'Call Updates  Successful';
+                } else {
+                    $user->createRecord('call_logs', array(
+                        'date_called' => Input::get('date_called'),
+                        'call_status' => Input::get('call_status'),
+                        'comments' => Input::get('comments'),
+                        'patient_id' => Input::get('cid'),
+                        'status' => 1,
+                        'create_on' => date('Y-m-d H:i:s'),
+                        'staff_id' => $user->data()->id,
+                        'update_on' => date('Y-m-d H:i:s'),
+                        'update_id' => $user->data()->id,
+                        'site_id' => $_GET['site_id'],
+                    ));
+                    $successMessage = 'Call Added Successful';
+                }
+            } else {
+                $pageError = $validate->errors();
+            }
         }
 
         if ($_GET['status'] == 16) {
@@ -2909,6 +2949,276 @@ if ($user->isLoggedIn()) {
                                             <input type="submit" name="unset_study_id" value="Unset Study ID Table" class="btn btn-primary">
                                         </div>
                                     </form>
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!--/.col (right) -->
+                        </div>
+                        <!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
+
+        <?php } elseif ($_GET['id'] == 16) { ?>
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>
+                                    <?php
+                                    $clients = $override->getNews('clients', 'status', 1, 'screened', 1);
+                                    $screened = $override->getCount1('clients', 'status', 1, 'screened', 1);
+                                    $eligible = $override->getCount1('clients', 'status', 1, 'eligible', 1);
+                                    $successMessage = 'Report Successful Created';
+                                    ?>
+                                    LUNGCANCER SCREENING STUDY : LIST OF ELIGIBEL CLIENTS
+                                </h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+                                    <li class="breadcrumb-item active"><?= $title; ?></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <section class="content-header">
+                                        <div class="container-fluid">
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">List of Eligible Clients</h3> &nbsp;&nbsp;
+                                                        <span class="badge badge-info right"><?= $eligible; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <?php
+                                                    if ($user->data()->power == 1 || $user->data()->accessLevel == 1 || $user->data()->accessLevel == 2) {
+                                                    ?>
+                                                        <form id="validation" enctype="multipart/form-data" method="post" autocomplete="off">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="row-form clearfix">
+                                                                        <div class="form-group">
+                                                                            <select class="form-control" name="site_id" style="width: 100%;" autocomplete="off">
+                                                                                <option value="">Select Site</option>
+                                                                                <?php foreach ($override->get('sites', 'status', 1) as $site) { ?>
+                                                                                    <option value="<?= $site['id'] ?>"><?= $site['name'] ?></option>
+                                                                                <?php } ?>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <div class="row-form clearfix">
+                                                                        <div class="form-group">
+                                                                            <input type="submit" name="search_by_site" value="Search by Site" class="btn btn-primary">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <ol class="breadcrumb float-sm-right">
+                                                        <li class="breadcrumb-item">
+                                                            <a href="index1.php">
+                                                                < Back</a>
+                                                        </li>
+                                                        &nbsp;
+                                                        <li class="breadcrumb-item">
+                                                            <a href="index1.php">
+                                                                Go Home > </a>
+                                                        </li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div><!-- /.container-fluid -->
+                                    </section>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="1">No.</th>
+                                                    <th colspan="2">Date Conseted</th>
+                                                    <th colspan="2">Study ID</th>
+                                                    <th colspan="2">Age</th>
+                                                    <th colspan="2">Sex</th>
+                                                    <th colspan="2">Patient Name</th>
+                                                    <th colspan="2">Patient Phone</th>
+                                                    <th colspan="2">Patient Phone 2</th>
+                                                    <th colspan="2">Status</th>
+                                                    <th colspan="2">SITE</th>
+                                                    <th colspan="2">Action</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $x = 1;
+                                                foreach ($clients as $value) {
+                                                    $yes_no = $override->get('yes_no', 'status', 1)[0];
+                                                    $sex = $override->get('sex', 'id', $value['sex'])[0];
+                                                    $site = $override->get('sites', 'id', $value['site_id'])[0];
+                                                    // $call_logs = $override->getNews('call_logs', 'status', 1, 'patient_id', $value['id']);
+                                                    $call_logs = $override->getlastRow('call_logs', 'patient_id', $value['id'], 'id')[0];
+                                                ?>
+                                                    <tr>
+                                                        <td class="table-user" colspan="1">
+                                                            <?= $x; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['date_registered']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['study_id']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['age']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $sex['name']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['firstname'] . '  ' . $value['middlename'] . ' ' . $value['lastname']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['patient_phone']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['patient_phone2']; ?>
+                                                        </td>
+
+                                                        <td class="table-user" colspan="2">
+                                                            <?php if ($call_logs['call_status'] == 1) {  ?><p style="color:yellow" ;>&nbsp;&nbsp;Update Calls</p> <?php } elseif ($call_logs['call_logs'] == 2) { ?><p style="color:yellow" ;>&nbsp;&nbsp;Recall Again</p> <?php } else { ?><p style="color:red" ;>&nbsp;&nbsp;Add Calls</p> <?php } ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $site['name']; ?>
+                                                        </td>
+
+                                                        <td class="text-center">
+                                                            <a href="#updateStatus<?= $call_logs['id'] ?>" role="button" class="btn btn-default" data-toggle="modal">
+                                                                <?php if ($call_logs['call_status'] == 1) {  ?><p style="color:yellow" ;>&nbsp;&nbsp;Update Calls</p> <?php } elseif ($call_logs['call_logs'] == 2) { ?><p style="color:yellow" ;>&nbsp;&nbsp;Recall Again</p> <?php } else { ?><p style="color:red" ;>&nbsp;&nbsp;Add Calls</p> <?php } ?>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <div class="modal fade" id="updateStatus<?= $call_logs['id'] ?>">
+                                                        <div class="modal-dialog">
+                                                            <form method="post">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">Update Call Status</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-6">
+                                                                                <div class="row-form clearfix">
+                                                                                    <!-- select -->
+                                                                                    <div class="form-group">
+                                                                                        <label>Date Called</label>
+                                                                                        <input value="<?php if ($call_logs['date_called']) {
+                                                                                                            echo $call_logs['date_called'];
+                                                                                                        } ?>" class="form-control" max="<?= date('Y-m-d'); ?>" type="date" name="date_called" id="date_called" required />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-6">
+                                                                                <div class="mb-2">
+                                                                                    <label for="call_status" class="form-label">Call Status</label>
+                                                                                    <select class="form-control" id="call_status" name="call_status" style="width: 100%;" required>
+                                                                                        <option value="<?= $call_logs['call_status'] ?>"><?php if ($call_logs['call_status']) {
+                                                                                                                                                if ($call_logs['call_status'] == 1) {
+                                                                                                                                                    echo 'Reached';
+                                                                                                                                                } elseif ($call_logs['call_status'] == 2) {
+                                                                                                                                                    echo 'Not Answered';
+                                                                                                                                                } elseif ($call_logs['call_status'] == 3) {
+                                                                                                                                                    echo 'Wrong Number';
+                                                                                                                                                } elseif ($call_logs['call_status'] == 4) {
+                                                                                                                                                    echo 'Not Reachable';
+                                                                                                                                                }
+                                                                                                                                            } else {
+                                                                                                                                                echo 'Select';
+                                                                                                                                            } ?>
+                                                                                        </option>
+                                                                                        <option value="1">Reached</option>
+                                                                                        <option value="2">Not Answered</option>
+                                                                                        <option value="3">Wrong Number</option>
+                                                                                        <option value="4">Not Reachable</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-sm-12">
+                                                                                <div class="row-form clearfix">
+                                                                                    <!-- select -->
+                                                                                    <div class="form-group">
+                                                                                        <label>Notes / Remarks /Comments</label>
+                                                                                        <textarea class="form-control" name="comments" rows="3">
+                                                                                            <?php if ($call_logs['comments']) {
+                                                                                                echo $call_logs['comments'];
+                                                                                            } ?>
+                                                                                        </textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="dr"><span></span></div>
+                                                                    </div>
+                                                                    <div class="modal-footer justify-content-between">
+                                                                        <input type="hidden" name="id" value="<?= $call_logs['id'] ?>">
+                                                                        <input type="hidden" name="cid" value="<?= $value['id'] ?>">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                        <input type="submit" name="update_call" class="btn btn-primary" value="Submit">
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.modal-content -->
+                                                            </form>
+                                                        </div>
+                                                        <!-- /.modal-dialog -->
+                                                    </div>
+                                                    <!-- /.modal -->
+
+                                                <?php $x++;
+                                                } ?>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Study Id</th>
+                                                    <th>Age</th>
+                                                    <th>Sex</th>
+                                                    <?php
+                                                    if ($user->data()->power == 1 || $user->data()->accessLevel == 1 || $user->data()->accessLevel == 2) {
+                                                    ?>
+                                                        <th>Interview Type</th>
+                                                        <th>Site</th>
+                                                    <?php } ?>
+                                                    <th>Status</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
                                 </div>
                                 <!-- /.card -->
                             </div>

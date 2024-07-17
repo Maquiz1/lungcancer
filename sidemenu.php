@@ -347,7 +347,7 @@ if ($user->isLoggedIn()) {
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="list.php" class="nav-link">
+                                <a href="info.php?id=16" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Eligible Lists</p>
                                 </a>

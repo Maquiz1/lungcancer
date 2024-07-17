@@ -29,7 +29,7 @@ $span0 = 19;
 $span1 = 11;
 $span2 = 8;
 
-$title = 'LUNGCANCER SCREENING STUDY : LIST OF ELIGIBEL CLIENTS-'. date('Y-m-d');
+$title = 'LUNGCANCER SCREENING STUDY : LIST OF ELIGIBEL CLIENTS-' . date('Y-m-d');
 
 $pdf = new Pdf();
 
