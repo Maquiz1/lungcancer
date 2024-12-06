@@ -359,7 +359,7 @@ if ($user->isLoggedIn()) {
                                 </a>
                             </li>
                              <li class="nav-item">
-                                <a href="summary.php" class="nav-link">
+                                <a href="summary2.php" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Summary Tables Per Person</p>
                                 </a>

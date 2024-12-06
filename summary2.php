@@ -107,7 +107,7 @@ if ($site_data) {
         $output .= '
                 <tr>
                     <td>' . $x . '</td>
-                    <td>' . $row['firstname']  . '</td>
+                    <td>' . $row['firstname'] .' - '. $row['lastname'] . '</td>
                     <td>' . $registered . '</td>
                     <td align="right">' . $screened . '</td>
                     <td align="right">' . $eligible . '</td>
