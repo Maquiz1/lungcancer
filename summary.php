@@ -38,7 +38,7 @@ if ($user->isLoggedIn()) {
 }
 
 
-$title = 'NIMREGENIN SUMMARY REPORT_' . date('Y-m-d');
+$title = 'LUNGCANCER SCREENING SUMMARY REPORT_' . date('Y-m-d');
 
 $pdf = new Pdf();
 
@@ -75,7 +75,7 @@ if ($site_data) {
                             <tr>
                                 <th rowspan="2">No.</th>
                                 <th rowspan="2">SITE</th>
-                                <th rowspan="2">REGISTERED</th>
+                                <th rowspan="2">RECRUITED</th>
                                 <th rowspan="2">SCREENED.</th>
                                 <th rowspan="2">ELIGIBLE</th>
                                 <th rowspan="2">ENROLLED</th>
