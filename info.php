@@ -391,6 +391,11 @@ if ($user->isLoggedIn()) {
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -3091,17 +3096,14 @@ if ($user->isLoggedIn()) {
                                                     <th colspan="2">Status</th>
                                                     <th colspan="2">SITE</th>
                                                     <th colspan="2">Action</th>
-
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
                                                 $x = 1;
                                                 foreach ($clients as $value) {
-                                                    $yes_no = $override->get('yes_no', 'status', 1)[0];
                                                     $sex = $override->get('sex', 'id', $value['sex'])[0];
                                                     $site = $override->get('sites', 'id', $value['site_id'])[0];
-                                                    // $call_logs = $override->getNews('call_logs', 'status', 1, 'patient_id', $value['id']);
                                                     $call_logs = $override->getlastRow('call_logs', 'patient_id', $value['id'], 'id')[0];
                                                 ?>
                                                     <tr>
@@ -3138,36 +3140,64 @@ if ($user->isLoggedIn()) {
                                                         </td>
 
                                                         <td class="text-center">
-                                                            <a href="#view_calls<?= $call_logs['id'] ?>" role="button" class="btn btn-default" data-toggle="modal">
-                                                                <?php if ($call_logs['call_status'] == 1) {  ?><p style="color:yellow" ;>&nbsp;&nbsp;Update Calls</p> <?php } elseif ($call_logs['call_logs'] == 2) { ?><p style="color:yellow" ;>&nbsp;&nbsp;Recall Again</p> <?php } else { ?><p style="color:red" ;>&nbsp;&nbsp;Add Calls</p> <?php } ?>
+                                                            <a href="#view_calls22<?= $value['id'] ?>" role="button" class="btn btn-default" data-toggle="modal">
+                                                                View Calls
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php $x++;
+                                                } ?>
+
+                                                <?php
+
+                                                $x = 1;
+                                                foreach ($call_logs as $value) {
+                                                    $yes_no = $override->get('yes_no', 'status', 1)[0];
+                                                    $sex = $override->get('sex', 'id', $value['sex'])[0];
+                                                    $site = $override->get('sites', 'id', $value['site_id'])[0];
+                                                    $call_logs = $override->getNews('call_logs', 'status', 1, 'patient_id', $value['id']);
+                                                ?>
+                                                    <tr>
+                                                        <td class="table-user" colspan="1">
+                                                            <?= $x; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['date_registered']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['study_id']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['age']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $sex['name']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['firstname'] . '  ' . $value['middlename'] . ' ' . $value['lastname']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['patient_phone']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['patient_phone2']; ?>
+                                                        </td>
+
+                                                        <td class="table-user" colspan="2">
+                                                            <?php if ($call_logs['call_status'] == 1) {  ?><p style="color:yellow" ;>&nbsp;&nbsp;Update Calls</p> <?php } elseif ($call_logs['call_logs'] == 2) { ?><p style="color:yellow" ;>&nbsp;&nbsp;Recall Again</p> <?php } else { ?><p style="color:red" ;>&nbsp;&nbsp;Add Calls</p> <?php } ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $site['name']; ?>
+                                                        </td>
+
+                                                        <td class="text-center">
+                                                            <a href="#updateStatus22<?= $value['id'] ?>" role="button" class="btn btn-default" data-toggle="modal">
+                                                                <?php if ($value['call_status'] == 1) {  ?><p style="color:yellow" ;>&nbsp;&nbsp;Update Calls</p> <?php } elseif ($value['call_logs'] == 2) { ?><p style="color:yellow" ;>&nbsp;&nbsp;Recall Again</p> <?php } else { ?><p style="color:red" ;>&nbsp;&nbsp;Add Calls</p> <?php } ?>
                                                             </a>
                                                         </td>
                                                     </tr>
 
-                                                    <div class="modal fade" id="view_calls<?= $call_logs['id'] ?>">
-                                                        <div class="modal-dialog modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title">Large Modal</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                  
-                                                                </div>
-                                                                <div class="modal-footer justify-content-between">
-                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                                </div>
-                                                            </div>
-                                                            <!-- /.modal-content -->
-                                                        </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
-                                                    <!-- /.modal -->
-
-                                                    <div class="modal fade" id="updateStatus<?= $call_logs['id'] ?>">
+                                                    <div class="modal fade" id="222updateStatus<?= $call_logs['id'] ?>">
                                                         <div class="modal-dialog">
                                                             <form method="post">
                                                                 <div class="modal-content">
@@ -3245,7 +3275,6 @@ if ($user->isLoggedIn()) {
                                                         <!-- /.modal-dialog -->
                                                     </div>
                                                     <!-- /.modal -->
-
                                                 <?php $x++;
                                                 } ?>
                                             </tbody>
@@ -3266,6 +3295,248 @@ if ($user->isLoggedIn()) {
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!--/.col (right) -->
+                        </div>
+                        <!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
+        <?php } elseif ($_GET['id'] == 17) { ?>
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>
+                                    <?php
+                                    $clients = $override->getNews('clients', 'status', 1, 'screened', 1);
+                                    $screened = $override->getCount1('clients', 'status', 1, 'screened', 1);
+                                    $eligible = $override->getCount1('clients', 'status', 1, 'eligible', 1);
+                                    $successMessage = 'Report Successful Created';
+                                    ?>
+                                    LUNGCANCER SCREENING STUDY : LIST OF ELIGIBEL CLIENTS
+                                </h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+                                    <li class="breadcrumb-item active"><?= $title; ?></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <section class="content-header">
+                                        <div class="container-fluid">
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">List of Eligible Clients</h3> &nbsp;&nbsp;
+                                                        <span class="badge badge-info right"><?= $eligible; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <?php
+                                                    if ($user->data()->power == 1 || $user->data()->accessLevel == 1 || $user->data()->accessLevel == 2) {
+                                                    ?>
+                                                        <form id="validation" enctype="multipart/form-data" method="post" autocomplete="off">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="row-form clearfix">
+                                                                        <div class="form-group">
+                                                                            <select class="form-control" name="site_id" style="width: 100%;" autocomplete="off">
+                                                                                <option value="">Select Site</option>
+                                                                                <?php foreach ($override->get('sites', 'status', 1) as $site) { ?>
+                                                                                    <option value="<?= $site['id'] ?>"><?= $site['name'] ?></option>
+                                                                                <?php } ?>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <div class="row-form clearfix">
+                                                                        <div class="form-group">
+                                                                            <input type="submit" name="search_by_site" value="Search by Site" class="btn btn-primary">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <ol class="breadcrumb float-sm-right">
+                                                        <li class="breadcrumb-item">
+                                                            <a href="index1.php">
+                                                                < Back</a>
+                                                        </li>
+                                                        &nbsp;
+                                                        <li class="breadcrumb-item">
+                                                            <a href="index1.php">
+                                                                Go Home > </a>
+                                                        </li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div><!-- /.container-fluid -->
+                                    </section>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <?php
+                                        // Example data array
+                                        $data = [
+                                            ['id' => 1, 'name' => 'Item 1'],
+                                            ['id' => 2, 'name' => 'Item 2'],
+                                            ['id' => 3, 'name' => 'Item 3']
+                                        ];
+                                        ?>
+
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="1">No.</th>
+                                                    <th colspan="2">Date Conseted</th>
+                                                    <th colspan="2">Study ID</th>
+                                                    <th colspan="2">Age</th>
+                                                    <th colspan="2">Sex</th>
+                                                    <th colspan="2">Patient Name</th>
+                                                    <th colspan="2">Patient Phone</th>
+                                                    <th colspan="2">Patient Phone 2</th>
+                                                    <th colspan="2">Status</th>
+                                                    <th colspan="2">SITE</th>
+                                                    <th colspan="2">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($clients as $value) : ?>
+                                                    <tr>
+                                                        <td class="table-user" colspan="1">
+                                                            <?= $x; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['date_registered']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['study_id']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['age']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $sex['name']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['firstname'] . '  ' . $value['middlename'] . ' ' . $value['lastname']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['patient_phone']; ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $value['patient_phone2']; ?>
+                                                        </td>
+
+                                                        <td class="table-user" colspan="2">
+                                                            <?php if ($call_logs['call_status'] == 1) {  ?><p style="color:yellow" ;>&nbsp;&nbsp;Update Calls</p> <?php } elseif ($call_logs['call_logs'] == 2) { ?><p style="color:yellow" ;>&nbsp;&nbsp;Recall Again</p> <?php } else { ?><p style="color:red" ;>&nbsp;&nbsp;Add Calls</p> <?php } ?>
+                                                        </td>
+                                                        <td class="table-user" colspan="2">
+                                                            <?= $site['name']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <!-- Button to Open the First Modal -->
+                                                            <!-- <button type="button" class="btn btn-primary open-modal" data-toggle="modal" data-target="#firstModal<?= $value['id'] ?>">
+                                                                Open Modal 1
+                                                            </button> -->
+                                                            <a href="#view_calls<?= $value['id'] ?>" role="button" class="btn btn-default" data-toggle="modal">
+                                                        </td>
+                                                    </tr>
+
+                                                    <?php
+                                                    foreach ($override->getNews('call_logs', 'status', 1, 'patient_id', $value['id']) as $item) :
+                                                        // foreach ($data as $item) :
+                                                    ?>
+                                                        <!-- Modal 1 for <?= $item['name'] ?> -->
+                                                        <div class="modal fade" id="view_calls<?= $value['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="view_calls<?= $value['id'] ?>" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="firstModalLabel<?= $item['id'] ?>">Modal 1 - <?= $item['name'] ?></h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>ID</th>
+                                                                                    <th>Description</th>
+                                                                                    <th>Action</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>1</td>
+                                                                                    <td>Item 1 Description</td>
+                                                                                    <td>
+                                                                                        <!-- Button to Open the Second Modal -->
+                                                                                        <button type="button" class="btn btn-secondary open-modal" data-toggle="modal" data-target="#secondModal<?= $item['id'] ?>">
+                                                                                            Open Modal 2
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <!-- Add more rows as needed -->
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Modal 2 for <?= $item['name'] ?> -->
+                                                        <div class="modal fade" id="secondModal<?= $item['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="secondModalLabel<?= $item['id'] ?>" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="secondModalLabel<?= $item['id'] ?>">Modal 2 - <?= $item['name'] ?></h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <!-- Modal 2 Content -->
+                                                                        <p>This is Modal 2 for <?= $item['name'] ?>.</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                        <!-- $call_logs = $override->getNews('call_logs', 'status', 1, 'patient_id', $value['id']); -->
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -3342,6 +3613,30 @@ if ($user->isLoggedIn()) {
         //         "responsive": true,
         //     });
         // });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Ensure only one modal is open at a time
+            $('.modal').on('show.bs.modal', function() {
+                var opened = $('.modal.show').not($(this));
+                opened.modal('hide');
+            });
+
+            // Optional: Close all modals when clicking outside the modal
+            $(document).on('click', function(event) {
+                if ($(event.target).hasClass('modal')) {
+                    $(event.target).modal('hide');
+                }
+            });
+
+            // Optional: Prevent closing parent modal when closing child modal
+            $('.modal').on('hide.bs.modal', function(event) {
+                event.stopPropagation();
+            });
+
+            // Optional: Add additional modal interaction logic here
+        });
     </script>
 </body>
 

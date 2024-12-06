@@ -259,18 +259,11 @@ if ($user->isLoggedIn()) {
                             'house_number' => Input::get('house_number'),
                             'head_household' => Input::get('head_household'),
                             'education' => Input::get('education'),
-                            'education_level' => Input::get('education_level'),
-                            'education_other' => Input::get('education_other'),
                             'occupation' => Input::get('occupation'),
-                            'kada' => Input::get('kada'),
-                            'kada_other' => Input::get('kada_other'),
-                            'kitengo' => Input::get('kitengo'),
-                            'kitengo_other' => Input::get('kitengo_other'),
                             'health_insurance' => Input::get('health_insurance'),
                             'insurance_name' => Input::get('insurance_name'),
                             'pay_services' => Input::get('pay_services'),
                             'insurance_name_other' => Input::get('insurance_name_other'),
-                            'interview_type' => Input::get('interview_type'),
                             'comments' => Input::get('comments'),
                             'update_on' => date('Y-m-d H:i:s'),
                             'update_id' => $user->data()->id,
@@ -280,6 +273,8 @@ if ($user->isLoggedIn()) {
                     } else {
 
                         $std_id = $override->getNews('study_id', 'site_id', $site_id, 'status', 0)[0];
+
+                        print_r($_POST);
 
                         $user->createRecord('clients', array(
                             'date_registered' => Input::get('date_registered'),
@@ -306,19 +301,13 @@ if ($user->isLoggedIn()) {
                             'house_number' => Input::get('house_number'),
                             'head_household' => Input::get('head_household'),
                             'education' => Input::get('education'),
-                            'education_level' => Input::get('education_level'),
-                            'education_other' => Input::get('education_other'),
                             'occupation' => Input::get('occupation'),
-                            'kada' => Input::get('kada'),
-                            'kada_other' => Input::get('kada_other'),
-                            'kitengo' => Input::get('kitengo'),
-                            'kitengo_other' => Input::get('kitengo_other'),
                             'health_insurance' => Input::get('health_insurance'),
                             'insurance_name' => Input::get('insurance_name'),
                             'insurance_name_other' => Input::get('insurance_name_other'),
                             'pay_services' => Input::get('pay_services'),
                             'comments' => Input::get('comments'),
-                            'interview_type' => Input::get('interview_type'),
+                            'interview_type' => 1,
                             'status' => 1,
                             'screened' => 0,
                             'eligible' => 0,
@@ -1973,27 +1962,7 @@ if ($user->isLoggedIn()) {
                                             <hr>
 
                                             <div class="row">
-                                                <div class="col-sm-3">
-                                                    <label>Type of Interview</label>
-                                                    <!-- radio -->
-                                                    <div class="row-form clearfix">
-                                                        <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="interview_type" id="interview_type1" value="1" <?php if ($clients['interview_type'] == 1) {
-                                                                                                                                                                        echo 'checked';
-                                                                                                                                                                    } ?>>
-                                                                <label class="form-check-label">Kap & Screening</label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="interview_type" id="interview_type2" value="2" <?php if ($clients['interview_type'] == 2) {
-                                                                                                                                                                        echo 'checked';
-                                                                                                                                                                    } ?>>
-                                                                <label class="form-check-label">Health Care Worker</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3" id="kap_screening">
+                                                <div class="col-sm-4" id="kap_screening">
                                                     <div class="row-form clearfix">
                                                         <div class="form-group">
                                                             <label>Level of educations</label>
@@ -2010,38 +1979,8 @@ if ($user->isLoggedIn()) {
                                                             </select>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-3" id="health_care_worker">
-                                                    <div class="row-form clearfix">
-                                                        <div class="form-group">
-                                                            <label>Kiwango chako cha juu cha elimu ni kipi?</label>
-                                                            <select id="education_level" name="education_level" class="form-control" required>
-                                                                <option value="<?= $clients['education_level'] ?>"><?php if ($clients['education_level']) {
-                                                                                                                        if ($clients['education_level'] == 1) {
-                                                                                                                            echo 'Certificate';
-                                                                                                                        } elseif ($clients['education_level'] == 2) {
-                                                                                                                            echo 'Diploma';
-                                                                                                                        } elseif ($clients['education_level'] == 3) {
-                                                                                                                            echo 'Degree';
-                                                                                                                        } elseif ($clients['education_level'] == 4) {
-                                                                                                                            echo 'Masters';
-                                                                                                                        } elseif ($clients['education_level'] == 96) {
-                                                                                                                            echo 'Nyingine (taja)';
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        echo 'Select education';
-                                                                                                                    } ?>
-                                                                </option>
-                                                                <option value="1">Certificate</option>
-                                                                <option value="2">Diploma</option>
-                                                                <option value="3">Degree</option>
-                                                                <option value="4">Masters</option>
-                                                                <option value="96">Nyingine (taja)</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
+                                                </div>                                                
+                                                <div class="col-sm-4">
                                                     <div class="row-form clearfix">
                                                         <div class="form-group">
                                                             <label>Who is the head of your household?</label>
@@ -2060,7 +1999,7 @@ if ($user->isLoggedIn()) {
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="row-form clearfix">
                                                         <!-- select -->
                                                         <div class="form-group">
@@ -2082,80 +2021,6 @@ if ($user->isLoggedIn()) {
                                             </div>
                                             <hr>
 
-                                            <div class="row">
-                                                <div class="col-sm-6" id="kada">
-                                                    <div class="row-form clearfix">
-                                                        <div class="form-group">
-                                                            <label>5a. Kada?</label>
-                                                            <select id="kada1" name="kada" class="form-control">
-                                                                <option value="<?= $clients['kada'] ?>"><?php if ($clients['kada']) {
-                                                                                                            if ($clients['kada'] == 1) {
-                                                                                                                echo 'Nurse';
-                                                                                                            } elseif ($clients['kada'] == 2) {
-                                                                                                                echo 'Clinician';
-                                                                                                            } elseif ($clients['kada'] == 3) {
-                                                                                                                echo 'Laboratory technologist';
-                                                                                                            } elseif ($clients['kada'] == 4) {
-                                                                                                                echo 'Radiologist';
-                                                                                                            } elseif ($clients['kada'] == 5) {
-                                                                                                                echo 'Oncologist';
-                                                                                                            } elseif ($clients['kada'] == 6) {
-                                                                                                                echo 'Pathologist';
-                                                                                                            } elseif ($clients['kada'] == 96) {
-                                                                                                                echo 'Nyingine (taja)';
-                                                                                                            }
-                                                                                                        } else {
-                                                                                                            echo 'Select';
-                                                                                                        } ?>
-                                                                </option>
-                                                                <option value="1">Nurse</option>
-                                                                <option value="2">Clinician</option>
-                                                                <option value="3">Laboratory technologist</option>
-                                                                <option value="4">Radiologist</option>
-                                                                <option value="5">Oncologist</option>
-                                                                <option value="6">Pathologist</option>
-                                                                <option value="96">Nyingine (taja)</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6" id="kitengo">
-                                                    <div class="row-form clearfix">
-                                                        <div class="form-group">
-                                                            <label>5b. Upo kwenye kitengo gani katika kituo hichi cha kutolea huduma za Afya? </label>
-                                                            <select id="kitengo1" name="kitengo" class="form-control">
-                                                                <option value="<?= $clients['kitengo'] ?>"><?php if ($clients['kitengo']) {
-                                                                                                                if ($clients['kitengo'] == 1) {
-                                                                                                                    echo 'OPD';
-                                                                                                                } elseif ($clients['kitengo'] == 2) {
-                                                                                                                    echo 'Reproductive and Child Health (RCH).';
-                                                                                                                } elseif ($clients['kitengo'] == 3) {
-                                                                                                                    echo 'CTC';
-                                                                                                                } elseif ($clients['kitengo'] == 4) {
-                                                                                                                    echo 'Radiology';
-                                                                                                                } elseif ($clients['kitengo'] == 4) {
-                                                                                                                    echo 'Laboratory';
-                                                                                                                } elseif ($clients['kitengo'] == 96) {
-                                                                                                                    echo 'Nyingine (taja)';
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                echo 'Select';
-                                                                                                            } ?>
-                                                                </option>
-                                                                <option value="1">OPD</option>
-                                                                <option value="2">Reproductive and Child Health (RCH).</option>
-                                                                <option value="3">CTC</option>
-                                                                <option value="4">Radiology</option>
-                                                                <option value="5">Laboratory</option>
-                                                                <option value="96">Nyingine (taja)</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
                                             <div class="card card-warning">
                                                 <div class="card-header">
                                                     <h3 class="card-title">health insurance</h3>
@@ -2171,7 +2036,7 @@ if ($user->isLoggedIn()) {
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="health_insurance" id="health_insurance1" value="1" <?php if ($clients['health_insurance'] == 1) {
                                                                                                                                                                             echo 'checked';
-                                                                                                                                                                        } ?>>
+                                                                                                                                                                        } ?> required>
                                                                 <label class="form-check-label">Yes</label>
                                                             </div>
 
