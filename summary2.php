@@ -20,7 +20,7 @@ if ($user->isLoggedIn()) {
 }
 
 
-$title = 'LUNGCANCER SUMMARY REPORT PER PERSON_' . date('Y-m-d');
+$title = 'LUNGCANCER SUMMARY REPORT PER PERSON';
 
 $pdf = new Pdf();
 $file_name = $title . '.pdf';
@@ -71,16 +71,16 @@ if ($user_data) {
 
     // Load HTML content into dompdf
     $x = 1;
-    foreach ($site_data as $row) {
-        $registered = $override->countData('clients', 'status', 1, 'id', $row['id']);
+    foreach ($user_data as $row) {
+        $registered = $override->countData('clients', 'status', 1, 'staff_id', $row['id']);
         $registered_Total = $override->getCount('clients', 'status', 1);
-        $screened = $override->countData2('clients', 'status', 1, 'screened', 1, 'id', $row['id']);
+        $screened = $override->countData2('clients', 'status', 1, 'screened', 1, 'staff_id', $row['id']);
         $screened_Total = $override->countData('clients', 'status', 1, 'screened', 1);
-        $eligible = $override->countData2('clients', 'status', 1, 'eligible', 1, 'id', $row['id']);
+        $eligible = $override->countData2('clients', 'status', 1, 'eligible', 1, 'staff_id', $row['id']);
         $eligible_Total = $override->countData('clients', 'status', 1, 'eligible', 1);
-        $enrolled = $override->countData2('clients', 'status', 1, 'enrolled', 1, 'id', $row['id']);
+        $enrolled = $override->countData2('clients', 'status', 1, 'enrolled', 1, 'staff_id', $row['id']);
         $enrolled_Total = $override->countData('clients', 'status', 1, 'enrolled', 1);
-        $end_study = $override->countData2('clients', 'status', 1, 'end_study', 1, 'id', $row['id']);
+        $end_study = $override->countData2('clients', 'status', 1, 'end_study', 1, 'staff_id', $row['id']);
         $end_study_Total = $override->countData('clients', 'status', 1, 'end_study', 1);
 
         $output .= '

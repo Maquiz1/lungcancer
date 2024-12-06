@@ -38,7 +38,7 @@ if ($user->isLoggedIn()) {
 }
 
 
-$title = 'LUNGCANCER SCREENING SUMMARY REPORT_' . date('Y-m-d');
+$title = 'LUNGCANCER SCREENING SUMMARY REPORT';
 
 $pdf = new Pdf();
 
