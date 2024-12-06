@@ -8,27 +8,9 @@ $random = new Random();
 
 if ($user->isLoggedIn()) {
     try {
-        // switch (Input::get('report')) {
-        //     case 1:
-        //         $data = $override->searchBtnDate3('batch', 'create_on', $_GET['start'], 'create_on', $_GET['end'], 'use_group', $_GET['group']);
-        //         $data_count = $override->getCountReport('batch', 'create_on', $_GET['start'], 'create_on', $_GET['end'], 'use_group', $_GET['group']);
-        //         break;
-        //     case 2:
-        //         $data = $override->searchBtnDate3('check_records', 'create_on', $_GET['start'], 'create_on', $_GET['end'], 'use_group', $_GET['group']);
-        //         $data_count = $override->getCountReport('check_records', 'create_on', $_GET['start'], 'create_on', $_GET['end'], 'use_group', $_GET['group']);
-        //         break;
-        //     case 3:
-        //         $data = $override->searchBtnDate3('batch_records', 'create_on', $_GET['start'], 'create_on', $_GET['end'], 'use_group', $_GET['group']);
-        //         $data_count = $override->getCountReport('batch_records', 'create_on', $_GET['start'], 'create_on', $_GET['end'], 'use_group', $_GET['group']);
-        //         break;
-        // }
-
-        $site_data = $override->getNews('user','status',1,'accessLevel',3);
+        $user_data = $override->getNews('user','status',1,'accessLevel',3);
         $Total = $override->getCount('clients', 'status', 1);
         $data_enrolled = $override->getCount1('clients', 'status', 1, 'enrolled', 1);
-        // $name = $override->get('user', 'status', 1, 'screened', $user->data()->id);
-        // $data_count = $override->getCount2('clients', 'status', 1, 'screened',1, 'site_id', $ussite_dataer->data()->site_id);
-
         $successMessage = 'Report Successful Created';
     } catch (Exception $e) {
         die($e->getMessage());
@@ -41,14 +23,11 @@ if ($user->isLoggedIn()) {
 $title = 'LUNGCANCER SUMMARY REPORT PER PERSON_' . date('Y-m-d');
 
 $pdf = new Pdf();
-
-// $title = 'NIMREGENIN SUMMARY REPORT_'. date('Y-m-d');
 $file_name = $title . '.pdf';
 
 $output = ' ';
 
-// if ($_GET['group'] == 2) {
-if ($site_data) {
+if ($user_data) {
 
     $output .= '
             <table width="100%" border="1" cellpadding="5" cellspacing="0">
